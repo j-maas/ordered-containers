@@ -1,0 +1,11 @@
+{
+  "license": "BSD-3-Clause",
+  "devDependencies": {
+    "elm": "^0.18.0",
+    "elm-test": "^0.18.9"
+  },
+  "scripts": {
+    "test": "elm-test --watch",
+    "test:ci": "elm-test"
+  }
+}
