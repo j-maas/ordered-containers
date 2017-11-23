@@ -283,10 +283,21 @@ fromList assocs =
 
 {-| Combine two dictionaries. If there is a collision, preference is given
 to the first dictionary.
+
+    union (singleton "x" 1) (singleton "x" 2) == singleton "x" 1
+
 -}
 union : OrderedDict comparable v -> OrderedDict comparable v -> OrderedDict comparable v
 union odict1 odict2 =
-    foldl insert odict2 odict1
+    let
+        reducer =
+            \k v acc ->
+                if member k odict1 then
+                    acc
+                else
+                    insert k v acc
+    in
+        foldl reducer odict1 odict2
 
 
 {-| Keep a key-value pair when its key appears in the second dictionary.
