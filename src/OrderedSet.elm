@@ -209,7 +209,15 @@ fromList xs =
 -}
 union : OrderedSet comparable -> OrderedSet comparable -> OrderedSet comparable
 union oset1 oset2 =
-    foldl insert oset2 oset1
+    let
+        reducer =
+            \k acc ->
+                if member k oset1 then
+                    acc
+                else
+                    insert k acc
+    in
+        foldl reducer oset1 oset2
 
 
 {-| Combine two sets. Keep values that appear in both sets.
