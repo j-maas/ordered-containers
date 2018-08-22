@@ -1,24 +1,11 @@
-module OrderedSet
-    exposing
-        ( OrderedSet
-        , empty
-        , singleton
-        , insert
-        , remove
-        , isEmpty
-        , member
-        , size
-        , foldl
-        , foldr
-        , map
-        , filter
-        , partition
-        , toList
-        , fromList
-        , union
-        , intersect
-        , diff
-        )
+module OrderedSet exposing
+    ( OrderedSet
+    , empty, singleton, insert, remove
+    , isEmpty, member, size
+    , toList, fromList
+    , map, foldl, foldr, filter, partition
+    , union, intersect, diff
+    )
 
 {-| A set of unique values that when iterated or converted to a list, the order of
 values will be the same as the order they were inserted.
@@ -180,7 +167,7 @@ partition predicate (OrderedSet list dict) =
         ( dict1, dict2 ) =
             Dict.partition (\k _ -> predicate k) dict
     in
-        ( OrderedSet list1 dict1, OrderedSet list2 dict2 )
+    ( OrderedSet list1 dict1, OrderedSet list2 dict2 )
 
 
 
@@ -214,10 +201,11 @@ union oset1 oset2 =
             \k acc ->
                 if member k oset1 then
                     acc
+
                 else
                     insert k acc
     in
-        foldl reducer oset1 oset2
+    foldl reducer oset1 oset2
 
 
 {-| Combine two sets. Keep values that appear in both sets.
