@@ -1,28 +1,11 @@
-module OrderedDict
-    exposing
-        ( OrderedDict
-        , empty
-        , singleton
-        , insert
-        , remove
-        , update
-        , isEmpty
-        , get
-        , member
-        , size
-        , filter
-        , partition
-        , foldl
-        , foldr
-        , map
-        , keys
-        , values
-        , toList
-        , fromList
-        , union
-        , intersect
-        , diff
-        )
+module OrderedDict exposing
+    ( OrderedDict
+    , empty, singleton, insert, update, remove
+    , isEmpty, member, get, size
+    , keys, values, toList, fromList
+    , map, foldl, foldr, filter, partition
+    , union, intersect, diff
+    )
 
 {-| A dictionary type that when iterated or converted to a list, the order of
 entries will be the same as the order they were inserted.
@@ -152,16 +135,18 @@ update key updater (OrderedDict list dict) =
                 Just _ ->
                     if List.member key list then
                         list
+
                     else
                         list ++ [ key ]
 
                 Nothing ->
                     if List.member key list then
                         List.filter (\k -> k /= key) list
+
                     else
                         list
     in
-        OrderedDict newList newDict
+    OrderedDict newList newDict
 
 
 
@@ -214,10 +199,11 @@ filter predicate dictionary =
         add key value odict =
             if predicate key value then
                 insert key value odict
+
             else
                 odict
     in
-        foldl add empty dictionary
+    foldl add empty dictionary
 
 
 {-| Split a `OrderedDict` to a tuple of `OrderedDict`. The first contains all
@@ -232,10 +218,11 @@ partition predicate dictionary =
         add key value ( odict1, odict2 ) =
             if predicate key value then
                 ( insert key value odict1, odict2 )
+
             else
                 ( odict1, insert key value odict2 )
     in
-        foldl add ( empty, empty ) dictionary
+    foldl add ( empty, empty ) dictionary
 
 
 
@@ -260,7 +247,7 @@ values (OrderedDict list dict) =
 -}
 toList : OrderedDict comparable v -> List ( comparable, v )
 toList (OrderedDict list dict) =
-    List.map2 (,) list (values <| OrderedDict list dict)
+    List.map2 (\a b -> ( a, b )) list (values <| OrderedDict list dict)
 
 
 {-| Convert an association list into a dictionary.
@@ -274,7 +261,7 @@ fromList assocs =
         dict =
             Dict.fromList assocs
     in
-        OrderedDict list dict
+    OrderedDict list dict
 
 
 
@@ -290,14 +277,15 @@ to the first dictionary.
 union : OrderedDict comparable v -> OrderedDict comparable v -> OrderedDict comparable v
 union odict1 odict2 =
     let
-        reducer =
+        unionReducer =
             \k v acc ->
                 if member k odict1 then
                     acc
+
                 else
                     insert k v acc
     in
-        foldl reducer odict1 odict2
+    foldl unionReducer odict1 odict2
 
 
 {-| Keep a key-value pair when its key appears in the second dictionary.

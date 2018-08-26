@@ -1,8 +1,8 @@
-module Test.OrderedSet exposing (..)
+module TestOrderedSet exposing (buildTests, combineTests, listTests, queryTests, transformTests)
 
 import Expect
-import Test exposing (..)
 import OrderedSet exposing (..)
+import Test exposing (..)
 
 
 buildTests : Test
@@ -51,14 +51,14 @@ listTests =
         set =
             fromList [ "y", "x" ]
     in
-        describe "list tests"
-            [ test "fromList of duplicated values" <|
-                \() -> Expect.equal (fromList [ "y", "x", "x", "y" ]) set
-            , test "fromList of different order" <|
-                \() -> Expect.notEqual (fromList [ "x", "y" ]) set
-            , test "toList" <|
-                \() -> Expect.equal (toList set) [ "y", "x" ]
-            ]
+    describe "list tests"
+        [ test "fromList of duplicated values" <|
+            \() -> Expect.equal (fromList [ "y", "x", "x", "y" ]) set
+        , test "fromList of different order" <|
+            \() -> Expect.notEqual (fromList [ "x", "y" ]) set
+        , test "toList" <|
+            \() -> Expect.equal (toList set) [ "y", "x" ]
+        ]
 
 
 transformTests : Test
@@ -67,24 +67,24 @@ transformTests =
         set =
             fromList [ "y", "x" ]
     in
-        describe "transform tests"
-            [ test "map" <|
-                \() ->
-                    Expect.equal (map (\k -> k ++ k) set)
-                        (fromList [ "yy", "xx" ])
-            , test "filter" <|
-                \() -> Expect.equal (filter (\k -> k > "x") set) (singleton "y")
-            , test "foldl" <|
-                \() ->
-                    Expect.equal (foldl (\k acc -> k ++ acc) "" set) "xy"
-            , test "foldr" <|
-                \() ->
-                    Expect.equal (foldr (\k acc -> acc ++ k) "" set) "xy"
-            , test "partition" <|
-                \() ->
-                    Expect.equal (partition (\k -> k < "y") set)
-                        ( singleton "x", singleton "y" )
-            ]
+    describe "transform tests"
+        [ test "map" <|
+            \() ->
+                Expect.equal (map (\k -> k ++ k) set)
+                    (fromList [ "yy", "xx" ])
+        , test "filter" <|
+            \() -> Expect.equal (filter (\k -> k > "x") set) (singleton "y")
+        , test "foldl" <|
+            \() ->
+                Expect.equal (foldl (\k acc -> k ++ acc) "" set) "xy"
+        , test "foldr" <|
+            \() ->
+                Expect.equal (foldr (\k acc -> acc ++ k) "" set) "xy"
+        , test "partition" <|
+            \() ->
+                Expect.equal (partition (\k -> k < "y") set)
+                    ( singleton "x", singleton "y" )
+        ]
 
 
 combineTests : Test
@@ -96,17 +96,17 @@ combineTests =
         set2 =
             fromList [ "y", "z" ]
     in
-        describe "combine tests"
-            [ test "union" <|
-                \() ->
-                    Expect.equal (union set1 set2)
-                        (fromList [ "y", "x", "z" ])
-            , test "intersect" <|
-                \() ->
-                    Expect.equal (intersect set1 set2)
-                        (fromList [ "y" ])
-            , test "diff" <|
-                \() ->
-                    Expect.equal (diff set1 set2)
-                        (fromList [ "x" ])
-            ]
+    describe "combine tests"
+        [ test "union" <|
+            \() ->
+                Expect.equal (union set1 set2)
+                    (fromList [ "y", "x", "z" ])
+        , test "intersect" <|
+            \() ->
+                Expect.equal (intersect set1 set2)
+                    (fromList [ "y" ])
+        , test "diff" <|
+            \() ->
+                Expect.equal (diff set1 set2)
+                    (fromList [ "x" ])
+        ]

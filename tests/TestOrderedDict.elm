@@ -1,8 +1,8 @@
-module Test.OrderedDict exposing (..)
+module TestOrderedDict exposing (buildTests, combineTests, listTests, queryTests, transformTests, updateTests)
 
 import Expect
-import Test exposing (..)
 import OrderedDict exposing (..)
+import Test exposing (..)
 
 
 buildTests : Test
@@ -68,14 +68,14 @@ listTests =
         dict =
             fromList [ ( "y", 2 ), ( "x", 1 ) ]
     in
-        describe "list tests"
-            [ test "keys" <|
-                \() -> Expect.equal (keys dict) [ "y", "x" ]
-            , test "values" <|
-                \() -> Expect.equal (values dict) [ 2, 1 ]
-            , test "toList" <|
-                \() -> Expect.equal (toList dict) [ ( "y", 2 ), ( "x", 1 ) ]
-            ]
+    describe "list tests"
+        [ test "keys" <|
+            \() -> Expect.equal (keys dict) [ "y", "x" ]
+        , test "values" <|
+            \() -> Expect.equal (values dict) [ 2, 1 ]
+        , test "toList" <|
+            \() -> Expect.equal (toList dict) [ ( "y", 2 ), ( "x", 1 ) ]
+        ]
 
 
 transformTests : Test
@@ -84,24 +84,24 @@ transformTests =
         dict =
             fromList [ ( "y", 2 ), ( "x", 1 ) ]
     in
-        describe "transform tests"
-            [ test "map" <|
-                \() ->
-                    Expect.equal (map (\k v -> ( k, v )) dict)
-                        (fromList [ ( "y", ( "y", 2 ) ), ( "x", ( "x", 1 ) ) ])
-            , test "filter" <|
-                \() -> Expect.equal (filter (\k v -> v > 1) dict) (singleton "y" 2)
-            , test "foldl" <|
-                \() ->
-                    Expect.equal (foldl (\k v acc -> acc + v) 0 dict) 3
-            , test "foldr" <|
-                \() ->
-                    Expect.equal (foldr (\k v acc -> acc ++ k) "" dict) "xy"
-            , test "partition" <|
-                \() ->
-                    Expect.equal (partition (\k v -> v < 2) dict)
-                        ( singleton "x" 1, singleton "y" 2 )
-            ]
+    describe "transform tests"
+        [ test "map" <|
+            \() ->
+                Expect.equal (map (\k v -> ( k, v )) dict)
+                    (fromList [ ( "y", ( "y", 2 ) ), ( "x", ( "x", 1 ) ) ])
+        , test "filter" <|
+            \() -> Expect.equal (filter (\k v -> v > 1) dict) (singleton "y" 2)
+        , test "foldl" <|
+            \() ->
+                Expect.equal (foldl (\k v acc -> acc + v) 0 dict) 3
+        , test "foldr" <|
+            \() ->
+                Expect.equal (foldr (\k v acc -> acc ++ k) "" dict) "xy"
+        , test "partition" <|
+            \() ->
+                Expect.equal (partition (\k v -> v < 2) dict)
+                    ( singleton "x" 1, singleton "y" 2 )
+        ]
 
 
 combineTests : Test
@@ -113,17 +113,17 @@ combineTests =
         dict2 =
             fromList [ ( "y", 3 ), ( "z", 10 ) ]
     in
-        describe "combine tests"
-            [ test "union" <|
-                \() ->
-                    Expect.equal (union dict1 dict2)
-                        (fromList [ ( "y", 2 ), ( "x", 1 ), ( "z", 10 ) ])
-            , test "intersect" <|
-                \() ->
-                    Expect.equal (intersect dict1 dict2)
-                        (fromList [ ( "y", 2 ) ])
-            , test "diff" <|
-                \() ->
-                    Expect.equal (diff dict1 dict2)
-                        (fromList [ ( "x", 1 ) ])
-            ]
+    describe "combine tests"
+        [ test "union" <|
+            \() ->
+                Expect.equal (union dict1 dict2)
+                    (fromList [ ( "y", 2 ), ( "x", 1 ), ( "z", 10 ) ])
+        , test "intersect" <|
+            \() ->
+                Expect.equal (intersect dict1 dict2)
+                    (fromList [ ( "y", 2 ) ])
+        , test "diff" <|
+            \() ->
+                Expect.equal (diff dict1 dict2)
+                    (fromList [ ( "x", 1 ) ])
+        ]
