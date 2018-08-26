@@ -1,6 +1,6 @@
 # ordered-containers
 
-[![Build Status](https://travis-ci.org/rnons/ordered-containers.svg?branch=master)](https://travis-ci.org/rnons/ordered-containers)
+[![build status](https://travis-ci.org/Y0hy0h/ordered-containers.svg?branch=master)](https://travis-ci.org/Y0hy0h/ordered-containers)
 
 An Elm library that provides ordered implementations to Elm's `Dict` and `Set` data structures.
 
