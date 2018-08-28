@@ -6,4 +6,4 @@ cache:
   directories:
     - tests/elm-stuff
 script:
-  - yarn test:ci
+  - yarn test
