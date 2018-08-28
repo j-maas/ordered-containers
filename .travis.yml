@@ -4,6 +4,7 @@ node_js:
 cache:
   yarn: true
   directories:
-    - tests/elm-stuff
+    - elm-stuff/build-artifacts
+    - elm-stuff/packages
 script:
   - yarn test
