@@ -1,8 +1,7 @@
 # ordered-containers
 
-[![Build Status](https://travis-ci.org/rnons/ordered-containers.svg?branch=master)](https://travis-ci.org/rnons/ordered-containers)
+[![build status](https://travis-ci.org/Y0hy0h/ordered-containers.svg?branch=master)](https://travis-ci.org/Y0hy0h/ordered-containers)
 
-An Elm library that provides `OrderedDict` and `OrderedSet` data structures.
+Ordered implementations to Elm's `Dict` and `Set` data structures.
 
-`OrderedDict` is similar to `Dict`, `OrderedSet` is similar to `Set`. The difference is when iterated or converted to a `List`, the order will be the same as the order they were inserted.
-
+The default implementations do not keep track of their item's ordering. `OrderedDict` or `OrderedSet`, however, will respect the insertion order when iterating over their items (using e. g. `map` or `fold`), or converting them to a `List`.
