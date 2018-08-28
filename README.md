@@ -1,6 +1,7 @@
 # ordered-containers
 
 [![build status](https://travis-ci.org/Y0hy0h/ordered-containers.svg?branch=master)](https://travis-ci.org/Y0hy0h/ordered-containers)
+[![elm package](https://img.shields.io/elm-package/v/y0hy0h/ordered-containers.svg)](https://package.elm-lang.org/packages/y0hy0h/ordered-containers/latest/)
 
 Ordered implementations of Elm's `Dict` and `Set` data structures.
 
