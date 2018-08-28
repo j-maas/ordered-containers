@@ -1,7 +1,7 @@
 {
     "type": "package",
     "name": "y0hy0h/ordered-containers",
-    "summary": "A library that provides OrderedDict and OrderedSet types",
+    "summary": "Ordered Dict and Set for Elm",
     "license": "BSD-3-Clause",
     "version": "1.0.1",
     "exposed-modules": [
