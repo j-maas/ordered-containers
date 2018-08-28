@@ -1,6 +1,6 @@
 {
     "type": "package",
-    "name": "rnons/ordered-containers",
+    "name": "y0hy0h/ordered-containers",
     "summary": "A library that provides OrderedDict and OrderedSet types",
     "license": "BSD-3-Clause",
     "version": "1.0.1",
