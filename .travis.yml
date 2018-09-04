@@ -13,4 +13,4 @@ install:
   - yarn add --dev elm elm-test@beta
 
 script:
-  - yarn test
+  - yarn run elm-test
