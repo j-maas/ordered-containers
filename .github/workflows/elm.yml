@@ -12,6 +12,6 @@ jobs:
     - name: Use Node.js LTS
       uses: actions/setup-node@v1
     - name: Install elm
-      run: npm install elm elm-test
+      run: npm install -g elm elm-test
     - name: Run tests
       run: elm-test
