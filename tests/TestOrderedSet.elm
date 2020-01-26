@@ -1,112 +1,216 @@
-module TestOrderedSet exposing (buildTests, combineTests, listTests, queryTests, transformTests)
+module TestOrderedSet exposing (buildTests, listTests, queryTests, transformTests)
 
 import Expect
+import Fuzz exposing (int, list)
 import OrderedSet exposing (..)
-import Test exposing (..)
+import Set
+import Test exposing (Test, describe, fuzz, fuzz2, test)
 
 
 buildTests : Test
 buildTests =
-    describe "build a set"
+    describe "build"
         [ test "empty" <|
             \() ->
-                Expect.equal empty (fromList [])
+                empty
+                    |> toList
+                    |> Expect.equal []
         , test "singleton" <|
             \() ->
-                Expect.equal (singleton "x") (fromList [ "x" ])
-        , test "insert to an empty set" <|
+                singleton 1
+                    |> toList
+                    |> Expect.equal [ 1 ]
+        , test "insert adds non-existant key last" <|
             \() ->
-                Expect.equal (insert "x" empty) (singleton "x")
-        , test "insert to a not empty set" <|
+                fromList [ 2, 3 ]
+                    |> insert 1
+                    |> toList
+                    |> Expect.equal [ 2, 3, 1 ]
+        , test "insert moves existant key to last" <|
             \() ->
-                Expect.equal (insert "x" <| singleton "y") (fromList [ "y", "x" ])
-        , test "remove not existing key" <|
-            \() -> Expect.equal (remove "x" (singleton "y")) (singleton "y")
-        , test "remove existing key" <|
-            \() -> Expect.equal (remove "x" (singleton "x")) empty
+                fromList [ 1, 2, 3 ]
+                    |> insert 1
+                    |> toList
+                    |> Expect.equal [ 2, 3, 1 ]
+        , test "remove existant key" <|
+            \() ->
+                fromList [ 1, 2, 3 ]
+                    |> remove 2
+                    |> toList
+                    |> Expect.equal [ 1, 3 ]
+        , test "remove with non-existant key changes nothing" <|
+            \() ->
+                fromList [ 1, 2, 3 ]
+                    |> remove 4
+                    |> toList
+                    |> Expect.equal [ 1, 2, 3 ]
         ]
 
 
 queryTests : Test
 queryTests =
     describe "query tests"
-        [ test "isEmpty True" <|
-            \() -> Expect.equal (isEmpty empty) True
-        , test "isEmpty False" <|
-            \() -> Expect.equal (isEmpty (singleton "x")) False
-        , test "member True" <|
-            \() -> Expect.equal (member "x" (singleton "x")) True
-        , test "member False" <|
-            \() -> Expect.equal (member "y" (singleton "x")) False
-        , test "size of empty" <|
-            \() -> Expect.equal (size empty) 0
+        [ test "isEmpty returns True for empty set" <|
+            \() ->
+                isEmpty empty
+                    |> Expect.equal True
+        , test "isEmpty returns False for non-empty set" <|
+            \() ->
+                fromList [ 1 ]
+                    |> isEmpty
+                    |> Expect.equal False
+        , fuzz (list int) "isEmpty matches Set.isEmpty" <|
+            \list ->
+                Expect.equal
+                    (Set.fromList list |> Set.isEmpty)
+                    (fromList list |> isEmpty)
+        , test "member detects existing key" <|
+            \() ->
+                fromList [ 1, 2, 3 ]
+                    |> member 2
+                    |> Expect.equal True
+        , test "member detects missing key" <|
+            \() ->
+                fromList [ 1, 2, 3 ]
+                    |> member 4
+                    |> Expect.equal False
+        , fuzz2 int (list int) "member matchs Set.member" <|
+            \key list ->
+                Expect.equal
+                    (Set.fromList list |> Set.member key)
+                    (fromList list |> member key)
+        , test "size of empty is 0" <|
+            \() ->
+                size empty
+                    |> Expect.equal 0
         , test "size" <|
-            \() -> Expect.equal (size (fromList [ "x", "y" ])) 2
+            \() ->
+                fromList [ 1, 2 ]
+                    |> size
+                    |> Expect.equal 2
+        , fuzz (list int) "size matches Set.size" <|
+            \list ->
+                Expect.equal
+                    (Set.fromList list |> Set.size)
+                    (fromList list |> size)
         ]
 
 
 listTests : Test
 listTests =
-    let
-        set =
-            fromList [ "y", "x" ]
-    in
     describe "list tests"
         [ test "fromList of duplicated values" <|
-            \() -> Expect.equal (fromList [ "y", "x", "x", "y" ]) set
-        , test "fromList of different order" <|
-            \() -> Expect.notEqual (fromList [ "x", "y" ]) set
-        , test "toList" <|
-            \() -> Expect.equal (toList set) [ "y", "x" ]
+            \() ->
+                fromList [ 1, 2, 1, 3 ]
+                    |> toList
+                    |> Expect.equal [ 2, 1, 3 ]
+        , test "fromList distinguishes different orders" <|
+            \() ->
+                Expect.notEqual
+                    (fromList [ 1, 2, 3 ])
+                    (fromList [ 2, 1, 3 ])
+        , fuzz (list int) "toList and fromList reverse each other" <|
+            \list ->
+                let
+                    set =
+                        fromList list
+                in
+                toList set
+                    |> fromList
+                    |> Expect.equal set
         ]
 
 
 transformTests : Test
 transformTests =
-    let
-        set =
-            fromList [ "y", "x" ]
-    in
     describe "transform tests"
-        [ test "map" <|
-            \() ->
-                Expect.equal (map (\k -> k ++ k) set)
-                    (fromList [ "yy", "xx" ])
-        , test "filter" <|
-            \() -> Expect.equal (filter (\k -> k > "x") set) (singleton "y")
-        , test "foldl" <|
-            \() ->
-                Expect.equal (foldl (\k acc -> k ++ acc) "" set) "xy"
-        , test "foldr" <|
-            \() ->
-                Expect.equal (foldr (\k acc -> acc ++ k) "" set) "xy"
-        , test "partition" <|
-            \() ->
-                Expect.equal (partition (\k -> k < "y") set)
-                    ( singleton "x", singleton "y" )
-        ]
+        [ fuzz (list int) "map matches List.map" <|
+            \list ->
+                let
+                    orderedSet =
+                        fromList list
 
+                    func k =
+                        k + 1
+                in
+                Expect.equal
+                    (toList orderedSet
+                        |> List.map
+                            (\k -> func k)
+                    )
+                    (map func orderedSet |> toList)
+        , fuzz (list int) "filter matches List.filter" <|
+            \list ->
+                let
+                    orderedSet =
+                        fromList list
 
-combineTests : Test
-combineTests =
-    let
-        set1 =
-            fromList [ "y", "x" ]
+                    func k =
+                        (k |> modBy 2) == 0
+                in
+                Expect.equal
+                    (toList orderedSet
+                        |> List.filter
+                            (\k -> func k)
+                    )
+                    (filter func orderedSet |> toList)
+        , fuzz (list int) "foldl matches List.foldl" <|
+            \list ->
+                let
+                    orderedSet =
+                        fromList list
 
-        set2 =
-            fromList [ "y", "z" ]
-    in
-    describe "combine tests"
-        [ test "union" <|
-            \() ->
-                Expect.equal (union set1 set2)
-                    (fromList [ "y", "x", "z" ])
-        , test "intersect" <|
-            \() ->
-                Expect.equal (intersect set1 set2)
-                    (fromList [ "y" ])
-        , test "diff" <|
-            \() ->
-                Expect.equal (diff set1 set2)
-                    (fromList [ "x" ])
+                    {- In order to test the difference between foldl and foldr,
+                       this function is not commutative (i. e. order of operations matter).
+                    -}
+                    func k acc =
+                        k :: acc
+
+                    initAcc =
+                        []
+                in
+                Expect.equal
+                    (toList orderedSet
+                        |> List.foldl
+                            func
+                            initAcc
+                    )
+                    (foldl func initAcc orderedSet)
+        , fuzz (list int) "foldr matches List.foldr" <|
+            \list ->
+                let
+                    orderedSet =
+                        fromList list
+
+                    {- In order to test the difference between foldl and foldr,
+                       this function is not commutative (i. e. order of operations matter).
+                    -}
+                    func k acc =
+                        k :: acc
+
+                    initAcc =
+                        []
+                in
+                Expect.equal
+                    (toList orderedSet
+                        |> List.foldr
+                            func
+                            initAcc
+                    )
+                    (foldr func initAcc orderedSet)
+        , fuzz (list int) "partition matches List.partition" <|
+            \list ->
+                let
+                    orderedSet =
+                        fromList list
+
+                    func k =
+                        (k |> modBy 2) == 0
+                in
+                Expect.equal
+                    (toList orderedSet
+                        |> List.partition
+                            func
+                    )
+                    (partition func orderedSet |> Tuple.mapBoth toList toList)
         ]
