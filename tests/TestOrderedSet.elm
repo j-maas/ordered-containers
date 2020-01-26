@@ -1,4 +1,4 @@
-module TestOrderedSet exposing (buildTests, listTests, queryTests, transformTests)
+module TestOrderedSet exposing (buildTests, conversionTests, queryTests, transformTests)
 
 import Expect
 import Fuzz exposing (int, list)
@@ -49,7 +49,7 @@ buildTests =
 
 queryTests : Test
 queryTests =
-    describe "query tests"
+    describe "query"
         [ test "isEmpty returns True for empty set" <|
             \() ->
                 isEmpty empty
@@ -96,9 +96,9 @@ queryTests =
         ]
 
 
-listTests : Test
-listTests =
-    describe "list tests"
+conversionTests : Test
+conversionTests =
+    describe "conversions"
         [ test "fromList of duplicated values" <|
             \() ->
                 fromList [ 1, 2, 1, 3 ]
@@ -118,12 +118,17 @@ listTests =
                 toList set
                     |> fromList
                     |> Expect.equal set
+        , fuzz (list int) "toSet" <|
+            \list ->
+                fromList list
+                    |> toSet
+                    |> Expect.equal (Set.fromList list)
         ]
 
 
 transformTests : Test
 transformTests =
-    describe "transform tests"
+    describe "transform"
         [ fuzz (list int) "map matches List.map" <|
             \list ->
                 let

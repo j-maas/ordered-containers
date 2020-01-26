@@ -2,7 +2,7 @@ module OrderedSet exposing
     ( OrderedSet
     , empty, singleton, insert, remove
     , isEmpty, member, size
-    , toList, fromList
+    , toList, fromList, toSet
     , map, foldl, foldr, filter, partition
     )
 
@@ -11,7 +11,7 @@ The values can be any comparable type. This includes `Int`,
 `Float`, `Time`, `Char`, `String`, and tuples or lists
 of comparable types.
 
-The insertion order is reflected in the functions under "List" and "Transform".
+The insertion order is reflected in the functions under "Conversions" and "Transform".
 The list order and the iteration order will be the order of insertion.
 
 The API mirrors the core `Set`'s API, with exception for the functions
@@ -34,9 +34,9 @@ an obvious way to handle the order between the combined sets.
 @docs isEmpty, member, size
 
 
-# Lists
+# Conversions
 
-@docs toList, fromList
+@docs toList, fromList, toSet
 
 
 # Transform
@@ -137,7 +137,7 @@ size (OrderedSet orderedSet) =
 
 
 
--- LISTS
+-- CONVERSIONS
 
 
 {-| Convert a set into a list in insertion order.
@@ -152,6 +152,13 @@ toList (OrderedSet orderedSet) =
 fromList : List comparable -> OrderedSet comparable
 fromList list =
     List.foldl insert empty list
+
+
+{-| Convert an ordered set into a regular set.
+-}
+toSet : OrderedSet comparable -> Set comparable
+toSet (OrderedSet orderedSet) =
+    orderedSet.set
 
 
 
