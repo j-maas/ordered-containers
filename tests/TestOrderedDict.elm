@@ -1,4 +1,4 @@
-module TestOrderedDict exposing (buildTests, listTests, queryTests, transformTests, updateTests)
+module TestOrderedDict exposing (buildTests, conversionTests, queryTests, transformTests, updateTests)
 
 import Dict
 import Expect
@@ -152,9 +152,9 @@ queryTests =
         ]
 
 
-listTests : Test
-listTests =
-    describe "list"
+conversionTests : Test
+conversionTests =
+    describe "conversions"
         [ test "keys" <|
             \() ->
                 fromList [ ( "one", 1 ), ( "two", 2 ), ( "three", 3 ) ]
@@ -185,6 +185,11 @@ listTests =
                 toList orderedDict
                     |> fromList
                     |> Expect.equal orderedDict
+        , fuzz (list (tuple ( int, int ))) "toDict" <|
+            \list ->
+                fromList list
+                    |> toDict
+                    |> Expect.equal (Dict.fromList list)
         ]
 
 

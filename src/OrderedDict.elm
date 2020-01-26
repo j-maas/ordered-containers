@@ -2,7 +2,7 @@ module OrderedDict exposing
     ( OrderedDict
     , empty, singleton, insert, update, remove
     , isEmpty, member, get, size
-    , keys, values, toList, fromList
+    , keys, values, toList, fromList, toDict
     , map, foldl, foldr, filter, partition
     )
 
@@ -11,7 +11,7 @@ insertion order. The keys can be any comparable type. This includes
 `Int`, `Float`, `Time`, `Char`, `String`, and tuples or lists
 of comparable types.
 
-The insertion order is reflected in the functions under "List" and "Transform".
+The insertion order is reflected in the functions under "Conversions" and "Transform".
 The list order and the iteration order will be the order of insertion.
 
 The API mirrors the core `Dict`'s API, with exception for the functions
@@ -34,9 +34,9 @@ an obvious way to handle the order between the combined dictionaries.
 @docs isEmpty, member, get, size
 
 
-# Lists
+# Conversions
 
-@docs keys, values, toList, fromList
+@docs keys, values, toList, fromList, toDict
 
 
 # Transform
@@ -185,7 +185,7 @@ size (OrderedDict orderedDict) =
 
 
 
--- LISTS
+-- CONVERSIONS
 
 
 {-| Get all of the keys in a dictionary, in insertion order.
@@ -226,6 +226,13 @@ fromList assocs =
             Dict.fromList assocs
     in
     OrderedDict { order = order, dict = dict }
+
+
+{-| Convert an ordered dictionary into a regular dictionary.
+-}
+toDict : OrderedDict comparable v -> Dict comparable v
+toDict (OrderedDict orderedDict) =
+    orderedDict.dict
 
 
 
