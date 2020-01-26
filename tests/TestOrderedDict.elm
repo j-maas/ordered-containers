@@ -94,9 +94,9 @@ updateTests =
 queryTests : Test
 queryTests =
     describe "query"
-        [ test "isEmpty returns True for empty" <|
+        [ test "isEmpty returns True for empty dict" <|
             \() -> Expect.equal (isEmpty empty) True
-        , test "isEmpty returns False for non-empty" <|
+        , test "isEmpty returns False for non-empty dict" <|
             \() ->
                 fromList
                     [ ( "one", 1 ) ]
@@ -165,6 +165,17 @@ listTests =
                 fromList [ ( "one", 1 ), ( "two", 2 ), ( "three", 3 ) ]
                     |> values
                     |> Expect.equal [ 1, 2, 3 ]
+        , test "fromList" <|
+            \() ->
+                fromList [ ( "one", 1 ), ( "two", 2 ), ( "three", 3 ) ]
+                    |> toList
+                    |> Expect.equal
+                        [ ( "one", 1 ), ( "two", 2 ), ( "three", 3 ) ]
+        , test "fromList distinguishes different orders" <|
+            \() ->
+                Expect.notEqual
+                    (fromList [ ( "one", 1 ), ( "two", 2 ), ( "three", 3 ) ])
+                    (fromList [ ( "two", 2 ), ( "one", 1 ), ( "three", 3 ) ])
         , fuzz (list (tuple ( int, int ))) "toList and fromList reverse each other" <|
             \list ->
                 let

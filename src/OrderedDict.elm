@@ -281,8 +281,12 @@ filter predicate original =
 
 {-| Partition a dictionary according to some test. The first dictionary
 contains all key-value pairs which passed the test, and the second
-contains the pairs that did not. The order is preserved in these new
-dictionaries.
+contains the pairs that did not.
+
+The order will be preserved in these new dictionaries in the sense
+that elements that are inserted after each other will
+remain ordered after each other.
+
 -}
 partition :
     (comparable -> v -> Bool)
