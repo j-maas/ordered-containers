@@ -52,13 +52,10 @@ import List
 {-| A dictionary of keys and values that remembers the order of insertion.
 -}
 type OrderedDict comparable v
-    = OrderedDict (OrdDict comparable v)
-
-
-type alias OrdDict comparable v =
-    { order : List comparable
-    , dict : Dict comparable v
-    }
+    = OrderedDict
+        { order : List comparable
+        , dict : Dict comparable v
+        }
 
 
 {-| Create an empty dictionary.

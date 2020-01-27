@@ -52,13 +52,10 @@ import Set exposing (Set)
 {-| Represents a set of unique values that remembers insertion order.
 -}
 type OrderedSet comparable
-    = OrderedSet (OrdSet comparable)
-
-
-type alias OrdSet comparable =
-    { order : List comparable
-    , set : Set comparable
-    }
+    = OrderedSet
+        { order : List comparable
+        , set : Set comparable
+        }
 
 
 {-| Create an empty set.
