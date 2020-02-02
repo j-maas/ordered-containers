@@ -54,4 +54,5 @@ The API purposely includes all functions from the regular `Dict` and `Set` with 
 
 In addition to the regular API there is a method for efficiently converting back to a regular collection, namely `OrderedDict.toDict` and `OrderedSet.toSet`.
 
-There also is an extra method for efficiently converting back to a regular collection, namely `OrderedDict.toDict` and `OrderedSet.toSet`.
+## History and contributors
+Originally, this package was based on [rnon's `ordered-containers`](https://github.com/rnons/ordered-containers) and updated for Elm 0.19. Later, it was merged with [wittjosiah's `elm-ordered-dict`](https://github.com/wittjosiah/elm-ordered-dict) and rewritten to handle re-insertion in a clearly documented way.
