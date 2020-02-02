@@ -11,12 +11,16 @@ insertion order. The keys can be any comparable type. This includes
 `Int`, `Float`, `Time`, `Char`, `String`, and tuples or lists
 of comparable types.
 
-The insertion order is reflected in the functions under "Conversions" and "Transform".
-The list order and the iteration order will be the order of insertion.
+The insertion order is reflected in the functions under
+["Conversions"](#conversions) and ["Transform"](#transform).
+The order in the lists and the iteration order will be the order of insertion.
 
-The API mirrors the core `Dict`'s API, with exception for the functions
-listed there under "Combine", because these functions do not have
-an obvious way to handle the order between the combined dictionaries.
+The API mirrors the core
+[`Dict`](https://package.elm-lang.org/packages/elm/core/latest/Dict)'s
+API, with exception for the functions listed there under
+["Combine"](https://package.elm-lang.org/packages/elm/core/latest/Dict#combine),
+because these functions do not have an obvious way to handle
+the order between the combined dictionaries.
 
 
 # Dictionaries
@@ -225,7 +229,8 @@ fromList assocs =
     OrderedDict { order = order, dict = dict }
 
 
-{-| Convert an ordered dictionary into a regular dictionary.
+{-| Convert an ordered dictionary into a regular
+[`Dict`](https://package.elm-lang.org/packages/elm/core/latest/Dict#Dict).
 -}
 toDict : OrderedDict comparable v -> Dict comparable v
 toDict (OrderedDict orderedDict) =

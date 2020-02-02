@@ -11,12 +11,16 @@ The values can be any comparable type. This includes `Int`,
 `Float`, `Time`, `Char`, `String`, and tuples or lists
 of comparable types.
 
-The insertion order is reflected in the functions under "Conversions" and "Transform".
+The insertion order is reflected in the functions under
+["Conversions"](#conversions) and ["Transform"](#transform).
 The list order and the iteration order will be the order of insertion.
 
-The API mirrors the core `Set`'s API, with exception for the functions
-listed there under "Combine", because these functions do not have
-an obvious way to handle the order between the combined sets.
+The API mirrors the core
+[`Set`](https://package.elm-lang.org/packages/elm/core/latest/Set)'s
+API, with exception for the functions listed there under
+["Combine"](https://package.elm-lang.org/packages/elm/core/latest/Set#combine),
+because these functions do not have an obvious way to handle
+the order between the combined sets.
 
 
 # Sets
@@ -151,7 +155,8 @@ fromList list =
     List.foldl insert empty list
 
 
-{-| Convert an ordered set into a regular set.
+{-| Convert an ordered set into a regular
+[`Set`](https://package.elm-lang.org/packages/elm/core/latest/Set#Set).
 -}
 toSet : OrderedSet comparable -> Set comparable
 toSet (OrderedSet orderedSet) =
