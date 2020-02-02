@@ -50,6 +50,8 @@ Dict.empty
 ```
 
 ## Comparison to `Dict` and `Set`
-The API purposely includes all functions from the regular `Dict` and `Set` with the exception for the "Combine" functions (e.g., `union`, `diff`, etc.). Those are left out, because combining ordered collections is not obvious.
+The API purposely includes all functions from the regular `Dict` and `Set` with the exception for the "Combine" functions (e.g., `union`, `diff`, etc.). Those are left out, because combining ordered collections does not have a single obvious solution. You can always write custom combination functions for your use case!
+
+In addition to the regular API there is a method for efficiently converting back to a regular collection, namely `OrderedDict.toDict` and `OrderedSet.toSet`.
 
 There also is an extra method for efficiently converting back to a regular collection, namely `OrderedDict.toDict` and `OrderedSet.toSet`.
