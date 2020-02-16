@@ -3,9 +3,9 @@
 [![build status](https://github.com/y0hy0h/ordered-containers/workflows/Build/badge.svg)](https://github.com/Y0hy0h/ordered-containers/actions)
 [![elm package](https://img.shields.io/elm-package/v/y0hy0h/ordered-containers.svg)](https://package.elm-lang.org/packages/y0hy0h/ordered-containers/latest/)
 
-`OrderedDict` and `OrderedSet` that remember the order of insertion.
+[`OrderedDict`] and [`OrderedSet`] that remember the order of insertion.
 
-The default implementations do not keep track of their item's ordering. `OrderedDict` or `OrderedSet`, by contrast, will respect the insertion order when converting them to a `List` or iterating over their items (using `foldl`, `foldr`, or `partition`).
+The default implementations, [`Dict`] and [`Set`], do not keep track of their item's ordering. [`OrderedDict`] or [`OrderedSet`], by contrast, will respect the insertion order when converting them to a [`List`] or iterating over their items (using [`foldl`][`OrderedDict.foldl`], [`foldr`][`OrderedDict.foldr`], or [`partition`][`OrderedDict.partition`]).
 
 ```elm
 import OrderedSet
@@ -50,9 +50,24 @@ Dict.empty
 ```
 
 ## Comparison to `Dict` and `Set`
-The API purposely includes all functions from the regular `Dict` and `Set` with the exception for the "Combine" functions (e.g., `union`, `diff`, etc.). Those are left out, because combining ordered collections does not have a single obvious solution. You can always write custom combination functions for your use case!
+The API purposely includes all functions from the regular [`Dict`] and [`Set`] with the exception for the "Combine" functions (e.g., [`union`][`Dict.union`], [`diff`][`Dict.diff`], etc.). Those are left out, because combining ordered collections does not have a single obvious solution. You can always write custom combination functions for your use case!
 
-In addition to the regular API there is a method for efficiently converting back to a regular collection, namely `OrderedDict.toDict` and `OrderedSet.toSet`.
+In addition to the regular API there is a method for efficiently converting back to a regular collection, namely [`OrderedDict.toDict`] and [`OrderedSet.toSet`].
 
 ## History and contributors
 Originally, this package was based on [rnon's `ordered-containers`](https://github.com/rnons/ordered-containers) and updated for Elm 0.19. Later, it was merged with [wittjosiah's `elm-ordered-dict`](https://github.com/wittjosiah/elm-ordered-dict) and rewritten to handle re-insertion in a clearly documented way.
+
+[`OrderedDict`]: https://package.elm-lang.org/packages/y0hy0h/ordered-containers/latest/OrderedDict
+[`OrderedDict.foldl`]: https://package.elm-lang.org/packages/y0hy0h/ordered-containers/latest/OrderedDict#foldl
+[`OrderedDict.foldr`]: https://package.elm-lang.org/packages/y0hy0h/ordered-containers/latest/OrderedDict#foldr
+[`OrderedDict.partition`]: https://package.elm-lang.org/packages/y0hy0h/ordered-containers/latest/OrderedDict#partition
+[`OrderedDict.toDict`]: https://package.elm-lang.org/packages/y0hy0h/ordered-containers/latest/OrderedDict#toDict
+
+[`OrderedSet`]: https://package.elm-lang.org/packages/y0hy0h/ordered-containers/latest/OrderedSet
+[`OrderedSet.toSet`]: https://package.elm-lang.org/packages/y0hy0h/ordered-containers/latest/OrderedSet#toSet
+
+[`Dict`]: https://package.elm-lang.org/packages/elm/core/latest/Dict
+[`Dict.union`]: https://package.elm-lang.org/packages/elm/core/latest/Dict#union
+[`Dict.diff`]: https://package.elm-lang.org/packages/elm/core/latest/Dict#diff
+[`Set`]: https://package.elm-lang.org/packages/elm/core/latest/Set
+[`List`]: https://package.elm-lang.org/packages/elm/core/latest/List
