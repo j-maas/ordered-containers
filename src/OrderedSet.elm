@@ -2,17 +2,25 @@ module OrderedSet exposing
     ( OrderedSet
     , empty, singleton, insert, remove
     , isEmpty, member, size
-    , toList, fromList
+    , toList, fromList, toSet
     , map, foldl, foldr, filter, partition
-    , union, intersect, diff
     )
 
-{-| A set of unique values that when iterated or converted to a list, the order of
-values will be the same as the order they were inserted.
+{-| A set of unique values that remembers their insertion order.
+The values can be any comparable type. This includes `Int`,
+`Float`, `Time`, `Char`, `String`, and tuples or lists
+of comparable types.
 
-As it uses `Dict` under the hood, the keys can only be comparable types, which
-include `Int`, `Float`, `Time`, `Char`, `String`, and tuples or lists of
-comparable types.
+The insertion order is reflected in the functions under
+["Conversions"](#conversions) and ["Transform"](#transform).
+The list order and the iteration order will be the order of insertion.
+
+The API mirrors the core
+[`Set`](https://package.elm-lang.org/packages/elm/core/latest/Set)'s
+API, with exception for the functions listed there under
+["Combine"](https://package.elm-lang.org/packages/elm/core/latest/Set#combine),
+because these functions do not have an obvious way to handle
+the order between the combined sets.
 
 
 # Sets
@@ -30,196 +38,192 @@ comparable types.
 @docs isEmpty, member, size
 
 
-# Lists
+# Conversions
 
-@docs toList, fromList
+@docs toList, fromList, toSet
 
 
 # Transform
 
 @docs map, foldl, foldr, filter, partition
 
-
-# Combine
-
-@docs union, intersect, diff
-
 -}
 
-import Dict exposing (Dict)
 import List
+import Set exposing (Set)
 
 
-{-| A type of `Set` that is iterated by the order of insertion.
+{-| Represents a set of unique values that remembers insertion order.
 -}
 type OrderedSet comparable
-    = OrderedSet (List comparable) (Dict comparable ())
+    = OrderedSet
+        { order : List comparable
+        , set : Set comparable
+        }
 
 
 {-| Create an empty set.
 -}
 empty : OrderedSet comparable
 empty =
-    OrderedSet [] Dict.empty
-
-
-{-| Check if a set is empty.
--}
-isEmpty : OrderedSet comparable -> Bool
-isEmpty oset =
-    oset == empty
-
-
-{-| Check if a value is in a set.
--}
-member : comparable -> OrderedSet comparable -> Bool
-member key (OrderedSet _ dict) =
-    Dict.member key dict
-
-
-{-| Get the number of values in the set.
--}
-size : OrderedSet comparable -> Int
-size (OrderedSet list _) =
-    List.length list
+    OrderedSet { order = [], set = Set.empty }
 
 
 {-| Create a set with one value.
 -}
 singleton : comparable -> OrderedSet comparable
 singleton key =
-    insert key empty
+    OrderedSet
+        { order = [ key ]
+        , set = Set.singleton key
+        }
 
 
-{-| Insert a value into a set.
+{-| Insert a value into a set. If the key already exists,
+the old value will be forgotten and the new value will be inserted at the end.
+
+    import OrderedSet
+
+    OrderedSet.empty
+        |> OrderedSet.insert 1
+        |> OrderedSet.insert 2
+        |> OrderedSet.insert 1
+        |> OrderedSet.toList
+    --> [ 2, 1 ]
+
 -}
 insert : comparable -> OrderedSet comparable -> OrderedSet comparable
-insert key (OrderedSet list dict) =
-    case Dict.get key dict of
-        Just _ ->
-            OrderedSet list dict
+insert key (OrderedSet orderedSet) =
+    if Set.member key orderedSet.set then
+        OrderedSet
+            { order = List.filter (\k -> k /= key) orderedSet.order ++ [ key ]
+            , set = orderedSet.set
+            }
 
-        Nothing ->
-            OrderedSet (list ++ [ key ]) (Dict.insert key () dict)
+    else
+        OrderedSet
+            { order = orderedSet.order ++ [ key ]
+            , set = Set.insert key orderedSet.set
+            }
 
 
-{-| Remove a value from a set. If the value doesn't exist,
+{-| Remove a value from a set. If the value is not found,
 no changes are made.
 -}
 remove : comparable -> OrderedSet comparable -> OrderedSet comparable
-remove key (OrderedSet list dict) =
-    case Dict.get key dict of
-        Just _ ->
-            OrderedSet (List.filter (\k -> k /= key) list) (Dict.remove key dict)
+remove key ((OrderedSet orderedSet) as original) =
+    if Set.member key orderedSet.set then
+        OrderedSet
+            { order = List.filter (\k -> k /= key) orderedSet.order
+            , set = Set.remove key orderedSet.set
+            }
 
-        Nothing ->
-            OrderedSet list dict
+    else
+        original
+
+
+
+-- QUERY
+
+
+{-| Determine if a set is empty.
+-}
+isEmpty : OrderedSet comparable -> Bool
+isEmpty (OrderedSet orderedSet) =
+    Set.isEmpty orderedSet.set
+
+
+{-| Determine if a value is in a set.
+-}
+member : comparable -> OrderedSet comparable -> Bool
+member key (OrderedSet orderedSet) =
+    Set.member key orderedSet.set
+
+
+{-| Determine the number of elements in a set.
+-}
+size : OrderedSet comparable -> Int
+size (OrderedSet orderedSet) =
+    Set.size orderedSet.set
+
+
+
+-- CONVERSIONS
+
+
+{-| Convert a set into a list in insertion order.
+-}
+toList : OrderedSet comparable -> List comparable
+toList (OrderedSet orderedSet) =
+    orderedSet.order
+
+
+{-| Convert a list into a set, removing any duplicates.
+-}
+fromList : List comparable -> OrderedSet comparable
+fromList list =
+    List.foldl insert empty list
+
+
+{-| Convert an ordered set into a regular
+[`Set`](https://package.elm-lang.org/packages/elm/core/latest/Set#Set).
+-}
+toSet : OrderedSet comparable -> Set comparable
+toSet (OrderedSet orderedSet) =
+    orderedSet.set
 
 
 
 -- TRANSFORM
 
 
-{-| Apply a function to all values in a set.
+{-| Map a function onto a set, creating a new set with no duplicates.
 -}
 map : (comparable -> comparable2) -> OrderedSet comparable -> OrderedSet comparable2
-map f (OrderedSet list _) =
-    fromList <| List.map f list
+map func (OrderedSet orderedSet) =
+    List.map func orderedSet.order
+        |> fromList
 
 
-{-| Fold the values in a set, in insertion order.
+{-| Fold over the values in a set, in insertion order.
 -}
 foldl : (comparable -> b -> b) -> b -> OrderedSet comparable -> b
-foldl f acc (OrderedSet list _) =
-    List.foldl f acc list
+foldl func acc (OrderedSet orderedSet) =
+    List.foldl func acc orderedSet.order
 
 
-{-| Fold the values in a set, in reverse insertion order.
+{-| Fold over the values in a set, in reverse insertion order.
 -}
 foldr : (comparable -> b -> b) -> b -> OrderedSet comparable -> b
-foldr f acc (OrderedSet list _) =
-    List.foldr f acc list
+foldr func acc (OrderedSet orderedSet) =
+    List.foldr func acc orderedSet.order
 
 
-{-| Return a new `OrderedSet` that only contains values that satisfy a predicate.
+{-| Only keep elements that pass the given test.
 -}
 filter :
     (comparable -> Bool)
     -> OrderedSet comparable
     -> OrderedSet comparable
-filter predicate (OrderedSet list dict) =
-    OrderedSet (List.filter predicate list)
-        (Dict.filter (\k _ -> predicate k) dict)
+filter predicate original =
+    toList original
+        |> List.filter predicate
+        |> fromList
 
 
-{-| Split a `OrderedSet` to a tuple of `OrderedSet`. The first contains all
-values that satisfy the predicate, and the second contains the rest.
+{-| Create two new sets. The first contains all the elements
+that passed the given test, and the second contains
+all the elements that did not.
+
+The order will be preserved in these new sets in the sense
+that elements that are inserted after each other will
+remain ordered after each other.
+
 -}
 partition :
     (comparable -> Bool)
     -> OrderedSet comparable
     -> ( OrderedSet comparable, OrderedSet comparable )
-partition predicate (OrderedSet list dict) =
-    let
-        ( list1, list2 ) =
-            List.partition predicate list
-
-        ( dict1, dict2 ) =
-            Dict.partition (\k _ -> predicate k) dict
-    in
-    ( OrderedSet list1 dict1, OrderedSet list2 dict2 )
-
-
-
--- LISTS
-
-
-{-| Convert a set into a list, sorted by insertion order.
--}
-toList : OrderedSet comparable -> List comparable
-toList (OrderedSet list _) =
-    list
-
-
-{-| Convert a list into a set, removing any duplicates.
--}
-fromList : List comparable -> OrderedSet comparable
-fromList xs =
-    List.foldl insert empty xs
-
-
-
--- COMBINE
-
-
-{-| Combine two sets. Keep all values while removing any duplicates.
--}
-union : OrderedSet comparable -> OrderedSet comparable -> OrderedSet comparable
-union oset1 oset2 =
-    let
-        reducer =
-            \k acc ->
-                if member k oset1 then
-                    acc
-
-                else
-                    insert k acc
-    in
-    foldl reducer oset1 oset2
-
-
-{-| Combine two sets. Keep values that appear in both sets.
--}
-intersect :
-    OrderedSet comparable
-    -> OrderedSet comparable
-    -> OrderedSet comparable
-intersect oset1 oset2 =
-    filter (\k -> member k oset2) oset1
-
-
-{-| Keep values of the first set that do not appear in the second set.
--}
-diff : OrderedSet comparable -> OrderedSet comparable -> OrderedSet comparable
-diff oset1 oset2 =
-    foldl (\k t -> remove k t) oset1 oset2
+partition predicate (OrderedSet orderedSet) =
+    List.partition predicate orderedSet.order
+        |> Tuple.mapBoth fromList fromList
