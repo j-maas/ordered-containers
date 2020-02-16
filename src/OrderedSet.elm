@@ -79,8 +79,18 @@ singleton key =
         }
 
 
-{-| Insert a value into a set. If the value already exists,
-it will now be considered inserted last.
+{-| Insert a value into a set. If the key already exists,
+the old value will be forgotten and the new value will be inserted at the end.
+
+    import OrderedSet
+
+    OrderedSet.empty
+        |> OrderedSet.insert 1
+        |> OrderedSet.insert 2
+        |> OrderedSet.insert 1
+        |> OrderedSet.toList
+    --> [ 2, 1 ]
+
 -}
 insert : comparable -> OrderedSet comparable -> OrderedSet comparable
 insert key (OrderedSet orderedSet) =

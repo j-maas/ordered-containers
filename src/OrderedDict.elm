@@ -81,6 +81,16 @@ singleton key value =
 
 {-| Insert a key-value pair into a dictionary. If the key already exists,
 the old value will be forgotten and the new value will be inserted at the end.
+
+    import OrderedDict
+
+    OrderedDict.empty
+        |> OrderedDict.insert 1 "one"
+        |> OrderedDict.insert 2 "two"
+        |> OrderedDict.insert 1 "three"
+        |> OrderedDict.toList
+    --> [ (2, "two"), (1, "three") ]
+
 -}
 insert : comparable -> v -> OrderedDict comparable v -> OrderedDict comparable v
 insert key value (OrderedDict orderedDict) =
@@ -124,6 +134,25 @@ the value will be replaced, keeping its order. If it did not exist, the
 new value will be added to the end.
 
 When the function returns a `Nothing`, the key is removed.
+
+    import OrderedDict
+
+    OrderedDict.empty
+        |> OrderedDict.insert 1 "one"
+        |> OrderedDict.insert 2 "two"
+        |> OrderedDict.update 1 (\_ -> Just "three")
+        |> OrderedDict.toList
+    --> [ (1, "three"), (2, "two") ]
+
+    OrderedDict.singleton 1 "one"
+        |> OrderedDict.update 2 (\_ -> Just "two")
+        |> OrderedDict.toList
+    --> [ (1, "one"), (2, "two") ]
+
+    OrderedDict.singleton 1 "one"
+        |> OrderedDict.update 1 (\_ -> Nothing)
+        |> OrderedDict.toList
+    --> []
 
 -}
 update :
