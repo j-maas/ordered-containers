@@ -7,6 +7,7 @@
 
 The default implementations, [`Dict`] and [`Set`], do not keep track of their item's ordering. [`OrderedDict`] or [`OrderedSet`], by contrast, will respect the insertion order when converting them to a [`List`] or iterating over their items (using [`foldl`][`OrderedDict.foldl`], [`foldr`][`OrderedDict.foldr`], or [`partition`][`OrderedDict.partition`]).
 
+## Examples
 ```elm
 import OrderedSet
 import Set
