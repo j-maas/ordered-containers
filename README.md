@@ -51,9 +51,16 @@ Dict.empty
 ```
 
 ## Comparison to `Dict` and `Set`
-The API purposely includes all functions from the regular [`Dict`] and [`Set`] with the exception for the "Combine" functions (e.g., [`union`][`Dict.union`], [`diff`][`Dict.diff`], etc.). Those are left out, because combining ordered collections does not have a single obvious solution. You can always write custom combination functions for your use case!
+The API purposely includes all functions from the regular [`Dict`] and [`Set`] with the exception for the ["Combine"](https://package.elm-lang.org/packages/elm/core/latest/Dict#combine) functions (e.g., [`union`][`Dict.union`], [`diff`][`Dict.diff`], etc.). Those are left out, because combining ordered collections does not have a single obvious solution. You can always write custom combination functions for your use case!
 
 In addition to the regular API there is a method for efficiently converting back to a regular collection, namely [`OrderedDict.toDict`] and [`OrderedSet.toSet`].
+
+## How it works
+The [`OrderedDict`], in addition to a plain [`Dict`], keeps a [`List`] of all the keys in the order they are inserted.
+
+This means that we sacrifice some space, but get the performance of [`Dict`] for its ["Query"](https://package.elm-lang.org/packages/y0hy0h/ordered-containers/latest/OrderedDict#query) operations, while only introducing minor overhead to the rest.
+
+As an alternative, [`pzp1997/assoc-list`](https://package.elm-lang.org/packages/pzp1997/assoc-list/latest/) stores only a list while providing a [`Dict`]-like interface.
 
 ## History and contributors
 Originally, this package was based on [rnon's `ordered-containers`](https://github.com/rnons/ordered-containers) and updated for Elm 0.19. Later, it was merged with [wittjosiah's `elm-ordered-dict`](https://github.com/wittjosiah/elm-ordered-dict) and rewritten to handle re-insertion in a clearly documented way.
@@ -63,6 +70,7 @@ Originally, this package was based on [rnon's `ordered-containers`](https://gith
 [`OrderedDict.foldr`]: https://package.elm-lang.org/packages/y0hy0h/ordered-containers/latest/OrderedDict#foldr
 [`OrderedDict.partition`]: https://package.elm-lang.org/packages/y0hy0h/ordered-containers/latest/OrderedDict#partition
 [`OrderedDict.toDict`]: https://package.elm-lang.org/packages/y0hy0h/ordered-containers/latest/OrderedDict#toDict
+[`OrderedDict.toList`]: https://package.elm-lang.org/packages/y0hy0h/ordered-containers/latest/OrderedDict#toList
 
 [`OrderedSet`]: https://package.elm-lang.org/packages/y0hy0h/ordered-containers/latest/OrderedSet
 [`OrderedSet.toSet`]: https://package.elm-lang.org/packages/y0hy0h/ordered-containers/latest/OrderedSet#toSet
@@ -70,5 +78,6 @@ Originally, this package was based on [rnon's `ordered-containers`](https://gith
 [`Dict`]: https://package.elm-lang.org/packages/elm/core/latest/Dict
 [`Dict.union`]: https://package.elm-lang.org/packages/elm/core/latest/Dict#union
 [`Dict.diff`]: https://package.elm-lang.org/packages/elm/core/latest/Dict#diff
+[`Dict.map`]: https://package.elm-lang.org/packages/elm/core/latest/Dict#map
 [`Set`]: https://package.elm-lang.org/packages/elm/core/latest/Set
 [`List`]: https://package.elm-lang.org/packages/elm/core/latest/List
