@@ -2,6 +2,7 @@
 
 [![build status](https://github.com/y0hy0h/ordered-containers/workflows/Build/badge.svg)](https://github.com/Y0hy0h/ordered-containers/actions)
 [![elm package](https://img.shields.io/elm-package/v/y0hy0h/ordered-containers.svg)](https://package.elm-lang.org/packages/y0hy0h/ordered-containers/latest/)
+[![Passively maintained](https://img.shields.io/badge/mainentance-passive-yellow)](#maintenance)
 
 [`OrderedDict`] and [`OrderedSet`] that remember the order of insertion.
 
@@ -81,3 +82,6 @@ Originally, this package was based on [rnon's `ordered-containers`](https://gith
 [`Dict.map`]: https://package.elm-lang.org/packages/elm/core/latest/Dict#map
 [`Set`]: https://package.elm-lang.org/packages/elm/core/latest/Set
 [`List`]: https://package.elm-lang.org/packages/elm/core/latest/List
+
+## Maintenance
+This project is passively maintened. I intend to respond to issues and pull requests, but am not dedicating time to develop new features.
