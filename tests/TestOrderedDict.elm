@@ -32,6 +32,11 @@ buildTests =
                     |> insert "one" 3
                     |> toList
                     |> Expect.equal [ ( "two", 2 ), ( "one", 3 ) ]
+        , test "fromList takes last of duplicated keys" <|
+            \() ->
+                fromList [ ( "one", 1 ), ( "two", 2 ), ( "one", 3 ) ]
+                    |> toList
+                    |> Expect.equal [ ( "two", 2 ), ( "one", 3 ) ]
         , test "remove deletes existing key" <|
             \() ->
                 fromList [ ( "one", 1 ), ( "two", 2 ), ( "three", 3 ) ]
