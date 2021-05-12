@@ -248,14 +248,7 @@ toList (OrderedDict orderedDict) =
 -}
 fromList : List ( comparable, v ) -> OrderedDict comparable v
 fromList assocs =
-    let
-        ( order, _ ) =
-            List.unzip assocs
-
-        dict =
-            Dict.fromList assocs
-    in
-    OrderedDict { order = order, dict = dict }
+    List.foldl (\( key, value ) dict -> insert key value dict) empty assocs
 
 
 {-| Convert an ordered dictionary into a regular
