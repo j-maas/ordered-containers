@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [2.0.2] - 2021-05-12
-### Changed
+### Fixed
 - Fix `OrderedDict.fromList` retaining duplicate keys ([#22](https://github.com/Y0hy0h/ordered-containers/issues/22)). If there are duplicate keys, only the last one is kept now.
 
 ## [2.0.1] - 2020-05-16
