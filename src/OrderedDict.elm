@@ -245,6 +245,9 @@ toList (OrderedDict orderedDict) =
 
 
 {-| Convert an association list into a dictionary.
+
+If a key appears multiple times in the list, only the last occurrence is kept.
+
 -}
 fromList : List ( comparable, v ) -> OrderedDict comparable v
 fromList assocs =
