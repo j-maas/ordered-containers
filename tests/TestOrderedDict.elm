@@ -32,6 +32,30 @@ buildTests =
                     |> insert "one" 3
                     |> toList
                     |> Expect.equal [ ( "two", 2 ), ( "one", 3 ) ]
+        , test "insertAt adds non-existant key" <|
+            \() ->
+                fromList [ ( "one", 1 ), ( "two", 2 ), ( "three", 3 ) ]
+                    |> insertAt 2 "four" 4
+                    |> toList
+                    |> Expect.equal [ ( "one", 1 ), ( "two", 2 ), ( "four", 4 ), ( "three", 3 ) ]
+        , test "insertAt adds existant key" <|
+            \() ->
+                fromList [ ( "one", 1 ), ( "two", 2 ), ( "three", 3 ) ]
+                    |> insertAt 1 "one" 3
+                    |> toList
+                    |> Expect.equal [ ( "two", 2 ), ( "one", 3 ), ( "three", 3 ) ]
+        , test "insertAt adds non-existant key at index greater than size" <|
+            \() ->
+                fromList [ ( "one", 1 ), ( "two", 2 ), ( "three", 3 ) ]
+                    |> insertAt 10 "four" 4
+                    |> toList
+                    |> Expect.equal [ ( "one", 1 ), ( "two", 2 ), ( "three", 3 ), ( "four", 4 ) ]
+        , test "insertAt adds existant key at index greater than size" <|
+            \() ->
+                fromList [ ( "one", 1 ), ( "two", 2 ), ( "three", 3 ) ]
+                    |> insertAt 10 "one" 3
+                    |> toList
+                    |> Expect.equal [ ( "two", 2 ), ( "three", 3 ), ( "one", 3 ) ]
         , test "fromList takes last of duplicated keys" <|
             \() ->
                 fromList [ ( "one", 1 ), ( "two", 2 ), ( "one", 3 ) ]

@@ -1,6 +1,6 @@
 module OrderedDict exposing
     ( OrderedDict
-    , empty, singleton, insert, update, remove
+    , empty, singleton, insert, insertAt, update, remove
     , isEmpty, member, get, size
     , keys, values, toList, fromList, toDict
     , map, foldl, foldr, filter, partition
@@ -30,7 +30,7 @@ the order between the combined dictionaries.
 
 # Build
 
-@docs empty, singleton, insert, update, remove
+@docs empty, singleton, insert, insertAt, update, remove
 
 
 # Query
@@ -104,6 +104,34 @@ insert key value (OrderedDict orderedDict) =
 
         newOrder =
             filteredOrder ++ [ key ]
+    in
+    OrderedDict
+        { order = newOrder
+        , dict = Dict.insert key value orderedDict.dict
+        }
+
+
+{-| Insert a key-value pair into a specific location in the order of an
+ordered dictionary. Replaces value when there is a collision.
+-}
+insertAt : Int -> comparable -> v -> OrderedDict comparable v -> OrderedDict comparable v
+insertAt index key value (OrderedDict orderedDict) =
+    let
+        filteredOrder =
+            if Dict.member key orderedDict.dict then
+                List.filter (\k -> k /= key) orderedDict.order
+
+            else
+                orderedDict.order
+
+        start =
+            List.take index filteredOrder
+
+        end =
+            List.drop index filteredOrder
+
+        newOrder =
+            List.concat [ start, [ key ], end ]
     in
     OrderedDict
         { order = newOrder
