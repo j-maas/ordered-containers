@@ -1,8 +1,12 @@
-# ordered-containers
+# ordered-containers (deprecated)
 
 [![build status](https://github.com/y0hy0h/ordered-containers/workflows/Build/badge.svg)](https://github.com/Y0hy0h/ordered-containers/actions)
 [![elm package](https://img.shields.io/elm-package/v/y0hy0h/ordered-containers.svg)](https://package.elm-lang.org/packages/y0hy0h/ordered-containers/latest/)
 [![Passively maintained](https://img.shields.io/badge/maintenance-passive-yellow)](#maintenance)
+
+> Attention! This package is deprecated, use [j-maas/elm-ordered-containers](https://package.elm-lang.org/packages/j-maas/elm-ordered-containers/latest/) instead!
+> 
+> I renamed my GitHub account to be easier to spell and unfortunately this means that this Elm package also has to be renamed.
 
 [`OrderedDict`] and [`OrderedSet`] that remember the order of insertion.
 
