@@ -2,7 +2,7 @@
 
 [![build status](https://github.com/y0hy0h/ordered-containers/workflows/Build/badge.svg)](https://github.com/Y0hy0h/ordered-containers/actions)
 [![elm package](https://img.shields.io/elm-package/v/y0hy0h/ordered-containers.svg)](https://package.elm-lang.org/packages/y0hy0h/ordered-containers/latest/)
-[![Passively maintained](https://img.shields.io/badge/mainentance-passive-yellow)](#maintenance)
+[![Passively maintained](https://img.shields.io/badge/maintenance-passive-yellow)](#maintenance)
 
 [`OrderedDict`] and [`OrderedSet`] that remember the order of insertion.
 
