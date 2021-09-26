@@ -1,8 +1,8 @@
 # ordered-containers (deprecated)
 
+![Deprecated](https://img.shields.io/badge/maintenance-deprecated-red)
 [![build status](https://github.com/y0hy0h/ordered-containers/workflows/Build/badge.svg)](https://github.com/Y0hy0h/ordered-containers/actions)
 [![elm package](https://img.shields.io/elm-package/v/y0hy0h/ordered-containers.svg)](https://package.elm-lang.org/packages/y0hy0h/ordered-containers/latest/)
-[![Passively maintained](https://img.shields.io/badge/maintenance-passive-yellow)](#maintenance)
 
 > Attention! This package is deprecated, use [j-maas/elm-ordered-containers](https://package.elm-lang.org/packages/j-maas/elm-ordered-containers/latest/) instead!
 > 
